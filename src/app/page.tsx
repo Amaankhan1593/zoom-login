@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
   const fontFamily = {
@@ -13,7 +12,7 @@ export default function Home() {
       <div className="flex h-screen">
         {/* Image on the left */}
         <div className="bg-[#f7f9fa] w-[500px] flex justify-center items-center">
-          <Image
+          <img
             src="/zoom.png"
             alt="Zoom Logo"
             className="w-[430px] h-[300px] mb-18 ml-62 "
