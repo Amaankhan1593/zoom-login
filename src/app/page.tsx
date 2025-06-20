@@ -68,7 +68,7 @@ export default function Home() {
             ].map(({ src, alt, label }, idx) => (
               <div key={idx} className="flex flex-col items-center">
                 <button className="w-12 h-12 border border-gray-200 rounded-xl flex justify-center items-center hover:bg-gray-100">
-                  <Image src={src} alt={alt} className="h-6" />
+                  <img src={src} alt={alt} className="h-6" />
                 </button>
                 <span className="text-xs mt-1 text-gray-600">{label}</span>
               </div>
