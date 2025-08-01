@@ -1,11 +1,50 @@
+'use client'
 import Header from "@/components/Header";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+export default function Home() {  
+  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});;
+
   const fontFamily = {
     fontFamily: "'Internacional', 'Helvetica', 'Arial'",
   };
 
+  const handleSubmit = (e:any) => {
+    e.preventDefault();
+
+    const newErrors = {};
+
+    // Email validation
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Enter a valid email address";
+    }
+
+    // Password validation
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+
+    setErrors(newErrors);
+
+   if (Object.keys(newErrors).length === 0) {
+    // ✅ Save to localStorage
+    localStorage.setItem("userData", JSON.stringify({ email, password }));
+
+     //Optional: Redirect after saving
+    router.push('https://userportaldev.cybernut-k12.com/report');
+
+    console.log("Form submitted:", { email, password });
+  }
+};
   return (
     <>
       <Header />
@@ -15,12 +54,16 @@ export default function Home() {
           <img
             src="/zoom.png"
             alt="Zoom Logo"
-            className="w-[430px] h-[300px] mb-18 ml-62 "
+            className="w-[430px] h-[300px] mb-18 ml-62"
           />
         </div>
 
         {/* Email form on the right */}
-        <div className="ml-60 mt-10 w-full max-w-sm">
+        <form
+          onSubmit={handleSubmit}
+          className="ml-60 mt-10 w-full max-w-sm"
+          noValidate
+        >
           <h1
             className="text-3xl font-semibold text-[32px] mb-8 mt-5 text-center text-[#080808]"
             style={fontFamily}
@@ -28,20 +71,31 @@ export default function Home() {
             Sign in
           </h1>
 
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            {/* You can insert label text if needed */}
-          </label>
           <input
             id="email"
             type="email"
             placeholder="Email or phone number"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-[380px] h-[50px] px-2 py-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0956b5]"
             style={{ borderColor: '#6e7680' }}
-
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-[380px] mt-3 h-[50px] px-2 py-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0956b5]"
+            style={{ borderColor: '#6e7680' }}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
 
           <button
             type="submit"
@@ -101,7 +155,7 @@ export default function Home() {
             </Link>{" "}
             apply.
           </p>
-        </div>
+        </form>
       </div>
     </>
   );
